@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="./renderer.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div id="form">
+            <h1>Profile</h1>
+
+            <div id="err">
+                <!-- Display errors if any -->
+            </div>
+
+            <!-- Display user data -->
+            <h6>Username: <span id="username"></span></h6>
+            <h6>Email: <span id="email"></span></h6>
+            <h6>Password: <span id="password"></span></h6>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="./bootstrap.js"></script>
+    <script>
+
+        function showAlert(message, status) {
+            var errDiv = document.getElementById("err");
+            var existingAlert = errDiv.querySelector(".alert");
+            if (existingAlert) {
+                existingAlert.innerHTML = message;
+                existingAlert.className = `alert alert-${status}`;
+            } else {
+                var alertDiv = document.createElement("div");
+                alertDiv.className = `alert alert-${status}`;
+                alertDiv.setAttribute("role", "alert");
+                alertDiv.innerHTML = message;
+                errDiv.appendChild(alertDiv);
+            }
+            setTimeout(() => {
+                errDiv.removeChild(existingAlert || alertDiv);
+            }, 8000);
+        }
+
+        const username = localStorage.getItem('username');
+        const email = localStorage.getItem('email');
+        const password = localStorage.getItem('password');
+
+        function truncateString(str, maxLength) {
+            if (str.length > maxLength) {
+                return str.substring(0, maxLength) + '......';
+            }
+            return str;
+        }
+
+        if (username != '' && email != '' && password != '') {
+            document.getElementById('username').innerHTML = username;
+            document.getElementById('email').innerHTML = email;
+            document.getElementById('password').innerHTML = truncateString(password, 20);
+            showAlert(`Welcome ${username} !`, 'success');
+        }
+        else {
+            document.getElementById('username').innerHTML = '';
+            document.getElementById('email').innerHTML = '';
+            document.getElementById('password').innerHTML = '';
+            localStorage.clear();
+            window.location = './index.html'
+        }
+    </script>
+</body>
+
+</html>
